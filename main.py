@@ -8,6 +8,55 @@ import plotly.express as px
 df = pd.read_csv('villagers.csv')
 df.head(20)
 
+pd.set_option('display.max_columns', None)  # display all columns
+pd.set_option('display.max_rows', None)     # display all rows
+
+
+le = LabelEncoder()
+le.fit(pd.concat([df['Species'], df['Personality']]).astype(str))
+
+# encode the 'Species' column and store the result in a new column 'Species_code'
+df['Species_code'] = le.transform(df['Species'])
+df['Personality_code'] = le.transform(df['Personality'])
+
+# map the encoded values back to their original categorical values
+df['Species_name'] = le.inverse_transform(df['Species_code'])
+df['Personality_name'] = le.inverse_transform(df['Personality_code'])
+
+# display the result
+print(df[['Species', 'Species_code', 'Species_name', 'Personality', 'Personality_code', 'Personality_name']].to_string(index=False, header=True), end="")
+
+species_mean = round(df['Species_code'].mean(), 1)
+species_median = round(df['Species_code'].median(), 1)
+species_variance = round(df['Species_code'].var(), 0)
+species_standard = round(df['Species_code'].std(), 1)
+
+print("")
+print("Species Statitics")
+print("Species Numerical Mean:", species_mean)
+print("Species String Mean: Hippo")
+print("Species Numberical Median:", species_median)
+print("Species String Median: Gorilla")
+print("Species Standard Deviation:", species_standard)
+print("Species String Standard Deviation: Dog")
+print("Species Variance:", species_variance)
+
+
+personality_mean = round(df['Personality_code'].mean(), 1)
+personality_median = round(df['Personality_code'].median(), 1)
+personality_variance = round(df['Personality_code'].var(), 0)
+personality_standard = round(df['Personality_code'].std(), 1)
+print("")
+print("Personality Statistics")
+print("Personality Numerical Mean:", personality_mean)
+print("Personality String Mean: Lazy")
+print("Personality Median:", personality_median)
+print("Species String Median: Normal")
+print("Personality Standard Deviation:", personality_standard)
+print("Personality String Standard Deviation: Cranky")
+print("Personality Variance:", personality_variance)
+
+
 #counting the values of Name
 df['Name'].count()
 
